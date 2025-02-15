@@ -28,18 +28,15 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   const [login] = useLoginMutation();
-  const onSubmit= async(values: z.infer<typeof formSchema>)=> {
-    const toastId = toast.loading('Logging in');
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const toastId = toast.loading("Logging in");
     try {
-
-      
       console.log(values);
       const userInfo = {
         email: values.email,
@@ -55,17 +52,22 @@ const LoginForm = () => {
           <code className="text-white">{toastId}</code>
         </pre>
       );
-      console.log(res?.data);
-      if (res?.data?.needsPasswordChange) {
-        navigate(`/change-password`);
+      // console.log(res);
+      if (user.role == "admin") {
+        navigate("/admin/dashboard");
       } else {
-        navigate(`/`);
+        navigate("/");
       }
+      // if (res?.data?.needsPasswordChange) {
+      //   navigate(`/change-password`);
+      // } else {
+      //   navigate(`/`);
+      // }
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");
     }
-  }
+  };
 
   return (
     <div>

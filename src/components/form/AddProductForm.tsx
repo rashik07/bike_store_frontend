@@ -1,133 +1,134 @@
-import { useForm, SubmitHandler } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React, { useState } from "react";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Select,
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+  Button,
+  Upload,
+  message,
+} from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { RcFile, UploadChangeParam } from "antd/es/upload/interface";
 import { useAddProductManagementMutation } from "@/redux/features/admin/productManagement.api";
-import { TResponse } from "@/types";
-import { toast } from "sonner";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  brand: z.string().min(2, "Brand must be at least 2 characters"),
-  price: z.number().min(1, "Price must be at least 1"),
-  type: z.enum(["Mountain", "Road", "Hybrid", "BMX", "Electric"]),
-  description: z.string(),
-  quantity: z.number().min(1, "Quantity must be at least 1"),
-  inStock: z.boolean(),
-});
+const { Option } = Select;
 
-type Bicycle = z.infer<typeof formSchema>;
-const AddProductForm = () => {
+export type Bicycle = {
+  name: string;
+  brand: string;
+  price: number;
+  type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric";
+  description?: string;
+  quantity: number;
+  inStock: boolean;
+};
 
-    
+const AddProductForm: React.FC = () => {
   const [addProductManagement] = useAddProductManagementMutation();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Bicycle>({ resolver: zodResolver(formSchema) });
+  const [form] = Form.useForm<Bicycle>();
+  const [fileList, setFileList] = useState<RcFile[]>([]);
 
-  const onSubmit: SubmitHandler<Bicycle> = async (data) => {
-    const toastId = toast.loading("Creating...");
-    const res = (await addProductManagement(data)) as TResponse;
-    console.log("Bicycle Data:", res);
-    if (res.error) {
-      toast.error(res.error.data.message, { id: toastId });
-    } else {
-      toast.success("Product created successfully", { id: toastId });
+  const handleUploadChange = ({ fileList }: UploadChangeParam) => {
+    setFileList(fileList.map((file) => file.originFileObj as RcFile));
+  };
+
+  const onFinish = async (values: Bicycle) => {
+    if (fileList.length === 0) {
+      message.error("Please upload a product image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(values));
+    fileList.forEach((file) => formData.append("file", file));
+
+    try {
+      await addProductManagement(formData).unwrap();
+      message.success("Product added successfully!");
+      form.resetFields();
+      setFileList([]);
+    } catch (error) {
+      message.error("Failed to add product. Please try again.");
     }
   };
 
   return (
-    <div>
-      <div className="max-w-md mx-auto mt-10 p-6 shadow-lg border rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Bicycle Form</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" {...register("name")} placeholder="Bicycle name" />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="brand">Brand</Label>
-            <Input
-              id="brand"
-              {...register("brand")}
-              placeholder="Bicycle brand"
-            />
-            {errors.brand && (
-              <p className="text-red-500 text-sm">{errors.brand.message}</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="price">Price</Label>
-            <Input
-              id="price"
-              type="number"
-              {...register("price", { valueAsNumber: true })}
-              placeholder="Bicycle price"
-            />
-            {errors.price && (
-              <p className="text-red-500 text-sm">{errors.price.message}</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="type">Type</Label>
-            <select
-              id="type"
-              {...register("type")}
-              className="border rounded p-2 w-full"
-            >
-              <option value="Mountain">Mountain</option>
-              <option value="Road">Road</option>
-              <option value="Hybrid">Hybrid</option>
-              <option value="BMX">BMX</option>
-              <option value="Electric">Electric</option>
-            </select>
-            {errors.type && (
-              <p className="text-red-500 text-sm">{errors.type.message}</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Input
-              id="description"
-              {...register("description")}
-              placeholder="Bicycle description"
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm">
-                {errors.description.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="quantity">Quantity</Label>
-            <Input
-              id="quantity"
-              type="number"
-              {...register("quantity", { valueAsNumber: true })}
-              placeholder="Quantity"
-            />
-            {errors.quantity && (
-              <p className="text-red-500 text-sm">{errors.quantity.message}</p>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <input id="inStock" type="checkbox" {...register("inStock")} />
-            <Label htmlFor="inStock">In Stock</Label>
-          </div>
-          <Button type="submit" className="w-full">
-            Submit
-          </Button>
-        </form>
-      </div>
-    </div>
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={onFinish}
+      initialValues={{ inStock: true, quantity: 1 }}
+    >
+      <Form.Item
+        label="Bicycle Name"
+        name="name"
+        rules={[{ required: true, message: "Please enter the bicycle name!" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Brand"
+        name="brand"
+        rules={[{ required: true, message: "Please enter the brand!" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Price ($)"
+        name="price"
+        rules={[{ required: true, message: "Please enter the price!" }]}
+      >
+        <InputNumber min={1} style={{ width: "100%" }} />
+      </Form.Item>
+
+      <Form.Item
+        label="Type"
+        name="type"
+        rules={[{ required: true, message: "Please select the type!" }]}
+      >
+        <Select>
+          {(["Mountain", "Road", "Hybrid", "BMX", "Electric"] as const).map(
+            (type) => (
+              <Option key={type} value={type}>
+                {type}
+              </Option>
+            )
+          )}
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        label="Quantity"
+        name="quantity"
+        rules={[{ required: true, message: "Please enter the quantity!" }]}
+      >
+        <InputNumber min={1} style={{ width: "100%" }} />
+      </Form.Item>
+
+      <Form.Item label="Upload Product Image">
+        <Upload
+          beforeUpload={() => false}
+          listType="picture"
+          onChange={handleUploadChange}
+        >
+          <Button icon={<UploadOutlined />}>Click to upload</Button>
+        </Upload>
+      </Form.Item>
+
+      <Form.Item label="Description" name="description">
+        <Input.TextArea rows={4} />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 
