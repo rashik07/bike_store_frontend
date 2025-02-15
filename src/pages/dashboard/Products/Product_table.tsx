@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement.api";
 import { TQueryParam } from "@/types";
-import { Button, Input, InputRef, Pagination, Space, Table, TableColumnType, TableProps } from "antd";
+import { Button, Image, Input, InputRef, Pagination, Space, Table, TableColumnType, TableProps } from "antd";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words'; // Import Highlighter for text search highlighting
@@ -14,6 +14,7 @@ interface Product {
   price: number;
   type: string;
   description: string;
+  productImg: string;
   quantity: number;
   inStock: boolean;
 }
@@ -164,6 +165,15 @@ const ProductTable: React.FC = () => {
   });
 
   const columns = [
+    {
+      title: "Image",
+      dataIndex: "productImg",
+      key: "productImg",
+      render: (productImg: string) => (
+        <Image src={productImg} alt="Product" style={{ width: 50 }} />
+      ),
+    
+    },
     {
       title: "Bicycle Name",
       dataIndex: "name",

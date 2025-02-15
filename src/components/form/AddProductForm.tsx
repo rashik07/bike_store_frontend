@@ -4,7 +4,6 @@ import {
   Input,
   InputNumber,
   Select,
-
   Button,
   Upload,
   message,
@@ -22,7 +21,7 @@ export type Bicycle = {
   type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric";
   description?: string;
   quantity: number;
-  inStock: boolean;
+
 };
 
 const AddProductForm: React.FC = () => {
@@ -49,86 +48,92 @@ const AddProductForm: React.FC = () => {
       message.success("Product added successfully!");
       form.resetFields();
       setFileList([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       message.error("Failed to add product. Please try again.");
     }
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      initialValues={{ inStock: true, quantity: 1 }}
-    >
-      <Form.Item
-        label="Bicycle Name"
-        name="name"
-        rules={[{ required: true, message: "Please enter the bicycle name!" }]}
+    <>
+      <h1>Product Add</h1>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        initialValues={{ inStock: true, quantity: 1 }}
       >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Brand"
-        name="brand"
-        rules={[{ required: true, message: "Please enter the brand!" }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Price ($)"
-        name="price"
-        rules={[{ required: true, message: "Please enter the price!" }]}
-      >
-        <InputNumber min={1} style={{ width: "100%" }} />
-      </Form.Item>
-
-      <Form.Item
-        label="Type"
-        name="type"
-        rules={[{ required: true, message: "Please select the type!" }]}
-      >
-        <Select>
-          {(["Mountain", "Road", "Hybrid", "BMX", "Electric"] as const).map(
-            (type) => (
-              <Option key={type} value={type}>
-                {type}
-              </Option>
-            )
-          )}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        label="Quantity"
-        name="quantity"
-        rules={[{ required: true, message: "Please enter the quantity!" }]}
-      >
-        <InputNumber min={1} style={{ width: "100%" }} />
-      </Form.Item>
-
-      <Form.Item label="Upload Product Image">
-        <Upload
-          beforeUpload={() => false}
-          listType="picture"
-          onChange={handleUploadChange}
+        <Form.Item
+          label="Bicycle Name"
+          name="name"
+          rules={[
+            { required: true, message: "Please enter the bicycle name!" },
+          ]}
         >
-          <Button icon={<UploadOutlined />}>Click to upload</Button>
-        </Upload>
-      </Form.Item>
+          <Input />
+        </Form.Item>
 
-      <Form.Item label="Description" name="description">
-        <Input.TextArea rows={4} />
-      </Form.Item>
+        <Form.Item
+          label="Brand"
+          name="brand"
+          rules={[{ required: true, message: "Please enter the brand!" }]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          label="Price ($)"
+          name="price"
+          rules={[{ required: true, message: "Please enter the price!" }]}
+        >
+          <InputNumber min={1} style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item
+          label="Type"
+          name="type"
+          rules={[{ required: true, message: "Please select the type!" }]}
+        >
+          <Select>
+            {(["Mountain", "Road", "Hybrid", "BMX", "Electric"] as const).map(
+              (type) => (
+                <Option key={type} value={type}>
+                  {type}
+                </Option>
+              )
+            )}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          label="Quantity"
+          name="quantity"
+          rules={[{ required: true, message: "Please enter the quantity!" }]}
+        >
+          <InputNumber min={1} style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item label="Upload Product Image">
+          <Upload
+            beforeUpload={() => false}
+            listType="picture"
+            onChange={handleUploadChange}
+          >
+            <Button icon={<UploadOutlined />}>Click to upload</Button>
+          </Upload>
+        </Form.Item>
+
+        <Form.Item label="Description" name="description">
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 
