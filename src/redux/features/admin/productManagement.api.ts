@@ -1,13 +1,6 @@
+import { TProduct, TQueryParam, TResponseRedux } from "../../../types";
 
-
-
-import {
-  TProduct,
-  TQueryParam,
-  TResponseRedux,
-} from '../../../types';
-
-import { baseApi } from '../../api/baseApi';
+import { baseApi } from "../../api/baseApi";
 
 const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,22 +15,29 @@ const productManagementApi = baseApi.injectEndpoints({
           });
         }
         return {
-          url: '/products',
-          method: 'GET',
+          url: "/products",
+          method: "GET",
           params,
         };
       },
-      transformResponse: (response: TResponseRedux<TProduct[]>) => ({
-        data: response.data,
-        meta: response.meta,
-      }),
+      transformResponse: (response: TResponseRedux<TProduct[]>) => {
+        return { data: response.data, meta: response.meta };
+      },
+      // providesTags: [ 'products' ],
     }),
 
     addProductManagement: builder.mutation({
       query: (data) => ({
-        url: '/products',
-        method: 'POST',
+        url: "/products",
+        method: "POST",
         body: data,
+      }),
+    }),
+
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/products/${id}`,
+        method: "DELETE",
       }),
     }),
   }),
@@ -46,4 +46,5 @@ const productManagementApi = baseApi.injectEndpoints({
 export const {
   useGetAllProductsQuery,
   useAddProductManagementMutation,
+  useDeleteProductMutation,
 } = productManagementApi;

@@ -11,33 +11,27 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import { RcFile, UploadChangeParam } from "antd/es/upload/interface";
 import { useAddProductManagementMutation } from "@/redux/features/admin/productManagement.api";
+import { TProduct } from "@/types";
 
 const { Option } = Select;
 
-export type Bicycle = {
-  name: string;
-  brand: string;
-  price: number;
-  type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric";
-  description?: string;
-  quantity: number;
-
-};
-
 const AddProductForm: React.FC = () => {
   const [addProductManagement] = useAddProductManagementMutation();
-  const [form] = Form.useForm<Bicycle>();
+  const [form] = Form.useForm<TProduct>();
   const [fileList, setFileList] = useState<RcFile[]>([]);
+  const [loading, setLoading] = useState(false); // Track loading state
 
   const handleUploadChange = ({ fileList }: UploadChangeParam) => {
     setFileList(fileList.map((file) => file.originFileObj as RcFile));
   };
 
-  const onFinish = async (values: Bicycle) => {
+  const onFinish = async (values: TProduct) => {
     if (fileList.length === 0) {
       message.error("Please upload a product image.");
       return;
     }
+
+    setLoading(true); // Set loading to true when submitting
 
     const formData = new FormData();
     formData.append("data", JSON.stringify(values));
@@ -51,6 +45,8 @@ const AddProductForm: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       message.error("Failed to add product. Please try again.");
+    } finally {
+      setLoading(false); // Reset loading state after submission
     }
   };
 
@@ -66,9 +62,7 @@ const AddProductForm: React.FC = () => {
         <Form.Item
           label="Bicycle Name"
           name="name"
-          rules={[
-            { required: true, message: "Please enter the bicycle name!" },
-          ]}
+          rules={[{ required: true, message: "Please enter the bicycle name!" }]}
         >
           <Input />
         </Form.Item>
@@ -117,6 +111,7 @@ const AddProductForm: React.FC = () => {
           <Upload
             beforeUpload={() => false}
             listType="picture"
+            fileList={fileList} // Ensure file list resets
             onChange={handleUploadChange}
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
@@ -128,8 +123,8 @@ const AddProductForm: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </Form.Item>
       </Form>

@@ -1,32 +1,24 @@
 import React, { useRef, useState } from "react";
-import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement.api";
-import { TQueryParam } from "@/types";
-import { Button, Image, Input, InputRef, Pagination, Space, Table, TableColumnType, TableProps } from "antd";
+import {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
+} from "@/redux/features/admin/productManagement.api";
+import { TProduct, TQueryParam } from "@/types";
+import {
+  Button,
+  Image,
+  Input,
+  InputRef,
+  Pagination,
+  Popconfirm,
+  Space,
+  Table,
+  TableColumnType,
+} from "antd";
 import { FilterDropdownProps } from "antd/es/table/interface";
-import { SearchOutlined } from '@ant-design/icons';
-import Highlighter from 'react-highlight-words'; // Import Highlighter for text search highlighting
+import { QuestionCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words"; // Import Highlighter for text search highlighting
 
-// Define the product type based on your API response
-interface Product {
-  id: string;
-  name: string;
-  brand: string;
-  price: number;
-  type: string;
-  description: string;
-  productImg: string;
-  quantity: number;
-  inStock: boolean;
-}
-
-// Define the expected API response structure
-interface ProductApiResponse {
-  result: Product[];
-  meta: {
-    limit: number;
-    total: number;
-  };
-}
 
 const ProductTable: React.FC = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
@@ -39,11 +31,22 @@ const ProductTable: React.FC = () => {
     isLoading,
     isFetching,
     isError,
-  } = useGetAllProductsQuery<ProductApiResponse>([
+    refetch,
+  } = useGetAllProductsQuery([
     { name: "page", value: page },
     { name: "sort", value: "id" },
     ...params,
   ]);
+  const [deleteProduct] = useDeleteProductMutation();
+  const handleDelete = async (record: object) => {
+    try {
+      await deleteProduct(record?._id);
+      // console.log(id);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
 
   const metaData = productsResponse?.data.meta;
 
@@ -57,8 +60,8 @@ const ProductTable: React.FC = () => {
 
   // Handle search
   const handleSearch = (
-    selectedKeys: string[], 
-    confirm: FilterDropdownProps["confirm"], 
+    selectedKeys: string[],
+    confirm: FilterDropdownProps["confirm"],
     dataIndex: string
   ) => {
     confirm();
@@ -75,7 +78,7 @@ const ProductTable: React.FC = () => {
   // Get search column props
   const getColumnSearchProps = (
     dataIndex: string
-  ): TableColumnType<Product> => ({
+  ): TableColumnType<TProduct> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -126,11 +129,7 @@ const ProductTable: React.FC = () => {
           >
             Filter
           </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => close()}
-          >
+          <Button type="link" size="small" onClick={() => close()}>
             Close
           </Button>
         </Space>
@@ -163,7 +162,7 @@ const ProductTable: React.FC = () => {
         text
       ),
   });
-
+  
   const columns = [
     {
       title: "Image",
@@ -172,7 +171,6 @@ const ProductTable: React.FC = () => {
       render: (productImg: string) => (
         <Image src={productImg} alt="Product" style={{ width: 50 }} />
       ),
-    
     },
     {
       title: "Bicycle Name",
@@ -214,15 +212,28 @@ const ProductTable: React.FC = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (_: any, record: Product) => (
-        <Button type="link" onClick={() => handleEdit(record)}>
-          Edit
-        </Button>
+      render: (_: any, record: TProduct) => (
+        <Space>
+          <Button type="link" onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Popconfirm
+            title="Are you sure to delete this product?"
+            onConfirm={() => handleDelete(record)}
+            okText="Yes"
+            cancelText="No"
+            placement="topRight"
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          >
+            <Button danger>Delete</Button>
+          </Popconfirm>
+         
+        </Space>
       ),
     },
   ];
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: TProduct) => {
     // Handle edit action
     console.log("Edit product:", product);
   };
@@ -232,7 +243,7 @@ const ProductTable: React.FC = () => {
       <Table
         loading={isFetching}
         columns={columns}
-        dataSource={productsResponse.data.result} // Access the result array
+        dataSource={productsResponse?.data?.result} // Access the result array
         pagination={false} // Enable pagination
       />
       <Pagination

@@ -5,6 +5,6 @@ export type TProduct = {
     type: string;
     quantity: number;
     description: string;
-    image: string;
+    productImg: string;
    
     };

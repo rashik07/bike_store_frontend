@@ -1,116 +1,80 @@
-// import { useState } from "react";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-// import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useAppDispatch } from "@/redux/hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
-// import { PasswordInput } from "@/components/ui/password-input";
+import { Form, Input, Button, Card, Typography, message } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { useEffect } from "react";
 
-const formSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-});
+const { Title } = Typography;
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
   const [login] = useLoginMutation();
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const toastId = toast.loading("Logging in");
-    try {
-      console.log(values);
-      const userInfo = {
-        email: values.email,
-        password: values.password,
-      };
-      const res = await login(userInfo).unwrap();
+  const [form] = Form.useForm();
+  const user = useAppSelector((state) => state.auth.user);
 
+  useEffect(() => {
+    if (user) {
+      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" : "/");
+      navigate(redirectTo);
+    }
+  }, [user, navigate, location]);
+
+  const onSubmit = async (values) => {
+    const key = "login";
+    message.loading({ content: "Logging in...", key });
+    try {
+      const res = await login(values).unwrap();
       const user = verifyToken(res.data.accessToken) as TUser;
-      dispatch(setUser({ user: user, token: res.data.accessToken }));
-      // toast.success('Logged in', { id: toastId, duration: 2000 });
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{toastId}</code>
-        </pre>
-      );
-      // console.log(res);
-      if (user.role == "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
-      // if (res?.data?.needsPasswordChange) {
-      //   navigate(`/change-password`);
-      // } else {
-      //   navigate(`/`);
-      // }
+      dispatch(setUser({ user, token: res.data.accessToken }));
+      message.success({ content: "Logged in successfully!", key, duration: 2 });
+      
+      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" : "/");
+      navigate(redirectTo);
     } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+      console.error("Login error", error);
+      message.error("Failed to login. Please try again.");
     }
   };
 
   return (
-    <div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 max-w-3xl mx-auto py-10"
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <Card className="w-full max-w-md shadow-lg rounded-lg p-6">
+        <Title level={2} className="text-center mb-6">
+          Login
+        </Title>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onSubmit}
         >
-          <FormField
-            control={form.control}
+          <Form.Item
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" type="email" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            label="Email"
+            rules={[{ required: true, message: "Please enter your email!", type: "email" }]}
+          >
+            <Input prefix={<MailOutlined />} placeholder="Enter your email" />
+          </Form.Item>
 
-          <FormField
-            control={form.control}
+          <Form.Item
             name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" {...field} />
-                </FormControl>
-                <FormDescription>Enter your password.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            label="Password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <Input.Password prefix={<LockOutlined />} placeholder="Enter your password" />
+          </Form.Item>
 
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
     </div>
   );
 };
