@@ -19,12 +19,12 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (user) {
-      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" : "/");
+      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" :user.role === "customer"? "/":"login");
       navigate(redirectTo);
     }
   }, [user, navigate, location]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
     const key = "login";
     message.loading({ content: "Logging in...", key });
     try {
@@ -33,7 +33,7 @@ const LoginForm = () => {
       dispatch(setUser({ user, token: res.data.accessToken }));
       message.success({ content: "Logged in successfully!", key, duration: 2 });
       
-      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" : "/");
+      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" :user.role === "customer"? "/":"login");
       navigate(redirectTo);
     } catch (error) {
       console.error("Login error", error);
