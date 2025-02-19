@@ -5,6 +5,9 @@ import { routeGenerator } from '@/utils/routesGenerator';
 import { adminPaths } from './admin.routes';
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import Home from '@/pages/home/Home';
+import MainLayout from '@/components/layout/MainLayout';
+import { ecommercePath } from './ecommerce.routes';
 
 // import Register from '../pages/Register';
 // import { adminPaths } from './admin.routes';
@@ -17,7 +20,8 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <MainLayout />,
+    children: routeGenerator(ecommercePath),
   },
   {
     path: '/admin',
