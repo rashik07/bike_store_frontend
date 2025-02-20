@@ -26,7 +26,14 @@ const productManagementApi = baseApi.injectEndpoints({
       // providesTags: [ 'products' ],
     }),
 
-    
+    getProductById: builder.query({
+      query: (productId) => ({
+        url: `/products/${productId}`,
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<TProduct>) => response.data,
+    }),
+
 
     addProductManagement: builder.mutation({
       query: (data) => ({
@@ -47,6 +54,7 @@ const productManagementApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllProductsQuery,
+  useGetProductByIdQuery,
   useAddProductManagementMutation,
   useDeleteProductMutation,
 } = productManagementApi;
