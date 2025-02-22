@@ -1,13 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
+// import App from '../App';
 import Login from '../pages/Login';
 import { routeGenerator } from '@/utils/routesGenerator';
 import { adminPaths } from './admin.routes';
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import Home from '@/pages/home/Home';
+// import Home from '@/pages/home/Home';
 import MainLayout from '@/components/layout/MainLayout';
 import { ecommercePath } from './ecommerce.routes';
+import SignupForm from '@/pages/Signup';
 
 // import Register from '../pages/Register';
 // import { adminPaths } from './admin.routes';
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/signup',
+    element: <SignupForm />,
   },
 //   {
 //     path: '/change-password',

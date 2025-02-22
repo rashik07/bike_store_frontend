@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Button, Menu } from "antd";
 import "antd/dist/reset.css";
+import { clearCart } from "@/redux/features/cart/cartSlice";
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const MainLayout = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearCart());
   };
 const handleLogin = () => {
   navigate("/login");

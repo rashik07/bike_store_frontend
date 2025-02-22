@@ -52,9 +52,9 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
-    addStudent: builder.mutation({
+    signup: builder.mutation({
       query: (data) => ({
-        url: '/users/create-student',
+        url: '/users/create-customer',
         method: 'POST',
         body: data,
       }),
@@ -70,7 +70,7 @@ const userManagementApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useAddStudentMutation,
+  useSignupMutation,
   useGetAllStudentsQuery,
   useGetAllFacultiesQuery,
   useChangePasswordMutation,

@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 
+
+
 export type TUser = {
   userId: string;
   role: string;
@@ -33,6 +35,8 @@ const authSlice = createSlice({
       // console.log(state);
       state.user = null;
       state.token = null;
+    
+      
   
     },
   },

@@ -19,12 +19,13 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (user) {
-      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" :user.role === "customer"? "/":"login");
+      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" : user.role === "customer" ? "/" : "login");
       navigate(redirectTo);
     }
   }, [user, navigate, location]);
 
-  const onSubmit = async (values:any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (values: any) => {
     const key = "login";
     message.loading({ content: "Logging in...", key });
     try {
@@ -33,7 +34,7 @@ const LoginForm = () => {
       dispatch(setUser({ user, token: res.data.accessToken }));
       message.success({ content: "Logged in successfully!", key, duration: 2 });
       
-      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" :user.role === "customer"? "/":"login");
+      const redirectTo = location.state?.from?.pathname || (user.role === "admin" ? "/admin/dashboard" : user.role === "customer" ? "/" : "login");
       navigate(redirectTo);
     } catch (error) {
       console.error("Login error", error);
@@ -74,6 +75,9 @@ const LoginForm = () => {
             </Button>
           </Form.Item>
         </Form>
+        <Button type="default" block onClick={() => navigate("/signup")}>
+          Sign Up
+        </Button>
       </Card>
     </div>
   );
