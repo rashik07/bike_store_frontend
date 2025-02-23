@@ -27,16 +27,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [userDetails, setUserDetails] = useState({ name: "", email: "" });
 
-  const handleQuantityChange = (value: number) => {
-    setQuantity(value);
-  };
-
-  const handleProductChange = (value: string) => {
-    const product = products.find((p) => p._id === value);
-    if (product) {
-      setSelectedProduct(product);
-    }
-  };
+ 
 
   const handleUserDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
