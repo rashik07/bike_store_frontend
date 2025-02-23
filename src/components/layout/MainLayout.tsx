@@ -1,26 +1,11 @@
 import React from "react";
-// import { Button } from '../ui/button';
-import { logout } from "@/redux/features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
 import { Outlet } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Button, Menu } from "antd";
+
 import "antd/dist/reset.css";
-import { clearCart } from "@/redux/features/cart/cartSlice";
+import MenubarEco from "./MenubarEco";
 
 const MainLayout = () => {
-  const navigate = useNavigate();
-  const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
-
-  const handleLogout = () => {
-    dispatch(logout());
-    dispatch(clearCart());
-  };
-const handleLogin = () => {
-  navigate("/login");
-}
-  console.log(user);
   return (
     <div>
       {/* this is main MainLayout <br/>
@@ -29,49 +14,7 @@ const handleLogin = () => {
 
       <div className="bg-gray-100 min-h-screen ">
         {/* Header */}
-        <div className="bg-blue-600">
-          <header className=" py-4 px-16 flex justify-between items-center mx-auto max-w-6xl ">
-            <div className="px-4">
-              <img
-                src="/bicycleStore_transparent.png"
-                alt="Logo"
-                className="h-12"
-              />
-            </div>
-            <nav className="px-4 flex items-center space-x-6">
-              <Menu
-                mode="horizontal"
-                theme="dark"
-                className="bg-blue-600 text-white border-none "
-                style={{ width: "325px" }}
-              >
-                <Menu.Item key="home">Home</Menu.Item>
-                <Menu.Item key="services">Services</Menu.Item>
-                <Menu.Item key="products">Products</Menu.Item>
-                <Menu.Item key="contact">Contact</Menu.Item>
-              </Menu>
-              {user ? (
-                <Button
-                  type="primary"
-                  danger
-                  className="ml-6"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Button>
-              ) : (
-                <Button
-                  type="primary"
-                  danger
-                  className="ml-6"
-                  onClick={handleLogin}
-                >
-                  Login
-                </Button>
-              )}
-            </nav>
-          </header>
-        </div>
+        <MenubarEco />
         <Outlet />
 
         <footer className="bg-gray-800 text-white py-6 mt-8">

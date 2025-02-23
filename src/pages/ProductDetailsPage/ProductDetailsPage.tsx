@@ -1,39 +1,48 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Rate } from "antd";
+import { Button, Rate, notification, Spin } from "antd";
 import "antd/dist/reset.css";
 import { useGetProductByIdQuery } from "@/redux/features/admin/productManagement.api";
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 
+
+
 const ProductDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data: product, error, isLoading } = useGetProductByIdQuery(id);
   const dispatch = useAppDispatch();
-  
+
   // Quantity state
   const [count, setCount] = useState(1);
 
   const handleAddToCart = () => {
+    if (product) {
       dispatch(addToCart({ ...product, count }));
-      console.log("Add to cart");
+
+      notification.success({
+        message: 'Added to Cart',
+        description: `${product.name} has been added to your cart.`,
+        placement: 'topRight',
+      });
+    }
   };
 
   // Increment quantity
   const incrementQuantity = () => {
-    if (count < product.quantity) {
-        setCount(count + 1);
+    if (product && count < product.quantity) {
+      setCount(count + 1);
     }
   };
 
   // Decrement quantity
   const decrementQuantity = () => {
     if (count > 1) {
-        setCount(count - 1);
+      setCount(count - 1);
     }
   };
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading) return <Spin className="text-center" size="large" />;
   if (error || !product) return <p className="text-center">Error loading product details</p>;
 
   return (

@@ -1,18 +1,13 @@
 // src/types.ts
 export interface TProduct {
-    _id: string; // Assuming each product has a unique id
+    _id: string; 
     name: string;
     price: number;
-    count?: number; // Add count property
+    count?: number; // Optional, but should be managed properly
 }
 
 // src/redux/cartSlice.ts
-
-
-// src/redux/cartSlice.ts
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 
 // Define a type for the cart state
 interface CartState {
@@ -29,28 +24,41 @@ const cartSlice = createSlice({
     initialState,
     reducers: {
         addToCart: (state, action: PayloadAction<TProduct>) => {
-            const { _id, count } = action.payload; // Destructure the payload to get id and count
-            const existingProductIndex = state.cartItems.findIndex(item => item._id === _id);
-            if (existingProductIndex >= 0) {
-                // Product exists, increment the count
-                const existingProduct = state.cartItems[existingProductIndex];
-                console.log("existingProduct",existingProduct);
-                existingProduct.count! += count; // Increment the existing count
+            const { _id, count = 1 } = action.payload; // Default count to 1
+            const existingProduct = state.cartItems.find(item => item._id === _id);
+            
+            if (existingProduct) {
+                existingProduct.count = (existingProduct.count ?? 1) + count; // Ensure count exists
             } else {
-                // Product doesn't exist, add it to the cart with the specified count
-
-                const newProduct = { ...action.payload, count }; // Use the count from the payload
-                console.log("newProduct",newProduct);
-                state.cartItems.push(newProduct);
+                state.cartItems.push({ ...action.payload, count });
             }
         },
-    
-        // You can add more reducers here (like removing items, updating quantities, etc.)
+        removeItem: (state, action: PayloadAction<string>) => {
+            state.cartItems = state.cartItems.filter(item => item._id !== action.payload);
+        },
+        increaseItem: (state, action: PayloadAction<string>) => {
+            const item = state.cartItems.find(item => item._id === action.payload);
+            if (item) {
+                item.count = (item.count ?? 1) + 1;
+            }
+        },
+        decreaseItem: (state, action: PayloadAction<string>) => {
+            const item = state.cartItems.find(item => item._id === action.payload);
+            if (item && (item.count ?? 1) > 1) {
+                item.count = (item.count ?? 1) - 1;
+            }
+        },
+        updateQuantity: (state, action: PayloadAction<{ _id: string, count: number }>) => {
+            const item = state.cartItems.find(item => item._id === action.payload._id);
+            if (item) {
+                item.count = action.payload.count;
+            }
+        },
         clearCart: (state) => {
             state.cartItems = [];
         },
     },
 });
 
-export const { addToCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeItem, increaseItem, decreaseItem, updateQuantity, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
