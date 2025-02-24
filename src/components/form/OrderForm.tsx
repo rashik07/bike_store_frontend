@@ -25,9 +25,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
   // console.log("user", user.userEmail);
 
 
-  const totalItems = products.reduce((total, item) => total + item.count, 0);
+  const totalItems = products.reduce((total:number, item:any) => total + item.count, 0);
   const totalPrice = products.reduce(
-    (total, item) => total + item.price * item.count,
+    (total:number, item:any) => total + item.price * item.count,
     0
   );
 
