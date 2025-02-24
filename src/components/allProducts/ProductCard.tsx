@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Typography } from "antd";
+
 import { TProduct } from "@/types";
 import { Link } from "react-router-dom";
 
