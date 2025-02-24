@@ -1,19 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement.api";
 import { TProduct } from "@/types";
 import { Link } from "react-router-dom";
 
 const ProductSection = () => {
-  const { data, error, isLoading } = useGetAllProductsQuery([]);
+  const { data: productData, error, isLoading } = useGetAllProductsQuery([]);
 
   return (
     <div>
-      {/* Product Section */}
       <section className="max-w-6xl mx-auto my-8 px-4">
         <h2 className="text-2xl font-bold text-center mb-4">Our Products</h2>
         {isLoading && <p className="text-center">Loading...</p>}
         {error && <p className="text-center text-red-500">Error loading products</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-          {data?.data?.result.slice(0, 6).map((product: TProduct) => (
+          {productData?.data?.result?.slice(0, 6).map((product: TProduct) => (
             <div
               key={product._id}
               className="border p-4 rounded-lg shadow-lg bg-white flex flex-col items-center"
@@ -26,7 +26,9 @@ const ProductSection = () => {
                 />
                 <h3 className="text-lg font-semibold mt-2 text-center">{product.name}</h3>
                 <p className="text-gray-600 text-center">${product.price.toFixed(2)}</p>
-                <p className="text-sm text-gray-500 text-center">{product.description}</p>
+                {product.description && (
+                  <p className="text-sm text-gray-500 text-center">{product.description}</p>
+                )}
               </Link>
               <Link
                 to={`/ProductDetailsPage/${product._id}`}

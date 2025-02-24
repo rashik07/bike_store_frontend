@@ -42,7 +42,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     //* Send Refresh
     console.log('Sending refresh token');
 
-    const res = await fetch('http://localhost:5000/api/auth/refresh-token', {
+    const res = await fetch('https://bicycle-store-amber.vercel.app/api/auth/refresh-token', {
       method: 'POST',
       credentials: 'include',
     });

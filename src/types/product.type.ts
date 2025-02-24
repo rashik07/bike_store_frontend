@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type TProduct = {
     _id: number;
     name: string;
@@ -8,5 +9,20 @@ export type TProduct = {
     description: string;
     productImg: string;
     count?: number;
+  
    
     };
+
+    export type TProductResponse = {
+        success: boolean;
+        message: string;
+        data: {
+          meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPage: number;
+          };
+          result: TProduct[];
+        };
+      };
