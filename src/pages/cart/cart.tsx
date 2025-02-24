@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, Col, Row, Typography, Space } from "antd";
@@ -26,8 +27,9 @@ const Cart: React.FC = () => {
     (total: number, item: any) => total + item.count,
     0
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   const totalPrice = cartItems.reduce(
+   
     (total: number, item: any) => total + item.price * item.count,
     0
   );

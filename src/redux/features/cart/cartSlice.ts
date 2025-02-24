@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/types.ts
 export interface TProduct {
-    _id: string; 
+    _id: any; 
     name: string;
     price: number;
-    count?: number; // Optional, but should be managed properly
+    count:number; // Optional, but should be managed properly
+    productImg?: string;
+
 }
 
 // src/redux/cartSlice.ts

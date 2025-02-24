@@ -1,4 +1,5 @@
-import { TProduct, TProductResponse, TQueryParam, TResponseRedux } from "../../../types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TProduct,  TQueryParam, TResponseRedux } from "../../../types";
 
 import { baseApi } from "../../api/baseApi";
 
@@ -20,7 +21,7 @@ const productManagementApi = baseApi.injectEndpoints({
           params,
         };
       },
-      transformResponse: (response: TResponseRedux<TProductResponse>) => {
+      transformResponse: (response: TResponseRedux<any>) => {
         return { data: response.data, meta: response.meta };
       },
       // providesTags: [ 'products' ],

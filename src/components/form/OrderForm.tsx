@@ -3,13 +3,13 @@ import React from "react";
 import { Form, Input, Button, Card, Typography, Row, Col, message } from "antd";
 import ProductSummary from "../checkout/ProductSummary";
 import BillSummary from "../checkout/BillSummary";
-import { TProduct } from "@/types";
+// import { TProduct } from "@/types";
 
 import { useAppSelector } from "@/redux/hooks";
 import { useCreateOrderMutation } from "@/redux/features/order/orderManagement.api";
 
 interface OrderFormProps {
-  products: TProduct[];
+  products: any;
 }
 
 interface OrderFormValues {
@@ -93,7 +93,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
           {/* Product Summary Section */}
           <Col xs={24} md={6}>
             <Title level={4}>Product Summary</Title>
-            {products.map((product) => (
+            {products.map((product:any) => (
               <ProductSummary
                 key={product._id}
                 product={product}

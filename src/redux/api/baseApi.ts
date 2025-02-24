@@ -33,10 +33,10 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 404) {
-    toast.error(result?.error?.data?.message);
+    toast.error("error 404");
   }
   if (result?.error?.status === 403) {
-    toast.error(result?.error?.data?.message);
+    toast.error("error 403");
   }
   if (result?.error?.status === 401) {
     //* Send Refresh

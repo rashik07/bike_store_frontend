@@ -1,7 +1,7 @@
 import Product_section from "@/components/home/Product_section";
 import Testimonial from "@/components/home/Testimonial";
 import { Carousel } from "antd";
-import React from "react";
+
 
 const Home = () => {
   return (

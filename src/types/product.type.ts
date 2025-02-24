@@ -7,7 +7,7 @@ export type TProduct = {
     type: string;
     quantity: number;
     description: string;
-    productImg: string;
+    productImg?: string;
     count?: number;
   
    

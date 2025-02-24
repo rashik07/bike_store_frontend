@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef, useState } from "react";
 import {
   useGetAllProductsQuery,
@@ -38,9 +39,9 @@ const ProductTable: React.FC = () => {
     ...params,
   ]);
   const [deleteProduct] = useDeleteProductMutation();
-  const handleDelete = async (record: object) => {
+  const handleDelete = async (record:any) => {
     try {
-      await deleteProduct(record?._id);
+      await deleteProduct(record._id);
       // console.log(id);
       refetch();
     } catch (error) {
@@ -48,13 +49,13 @@ const ProductTable: React.FC = () => {
     }
   };
 
-  const metaData = productsResponse?.data.meta;
+  const metaData = productsResponse.data.meta;
 
   if (isLoading || isFetching) {
     return <div>Loading...</div>;
   }
 
-  if (isError || !productsResponse?.data.result) {
+  if (isError || !productsResponse.data.result) {
     return <div>Error loading products.</div>;
   }
 
