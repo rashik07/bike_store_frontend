@@ -22,7 +22,7 @@ import Highlighter from "react-highlight-words"; // Import Highlighter for text 
 
 
 const ProductTable: React.FC = () => {
-  const [params, setParams] = useState<TQueryParam[]>([]);
+  const [params] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState<string>("");
@@ -49,13 +49,13 @@ const ProductTable: React.FC = () => {
     }
   };
 
-  const metaData = productsResponse.data.meta;
+  const metaData = productsResponse?.data?.meta;
 
   if (isLoading || isFetching) {
     return <div>Loading...</div>;
   }
 
-  if (isError || !productsResponse.data.result) {
+  if (isError || !productsResponse || !productsResponse.data.result) {
     return <div>Error loading products.</div>;
   }
 

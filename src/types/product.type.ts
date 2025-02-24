@@ -9,8 +9,7 @@ export type TProduct = {
     description: string;
     productImg?: string;
     count?: number;
-  
-   
+    [key: string]: any; // Add index signature
     };
 
     export type TProductResponse = {
