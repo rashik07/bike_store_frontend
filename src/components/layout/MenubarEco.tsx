@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
+
   ShoppingCartOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
@@ -16,20 +14,16 @@ const items = [
   {
     label: <Link to="/">Home</Link>,
     key: "home",
-    icon: <MailOutlined />,
+
   },
+
   {
-    label: <Link to="/services">Services</Link>,
-    key: "services",
-    icon: <AppstoreOutlined />,
-  },
-  {
-    label: <Link to="/products">Products</Link>,
+    label: <Link to="/allProducts">Products</Link>,
     key: "products",
-    icon: <SettingOutlined />,
+
   },
   {
-    label: <Link to="/contact">Contact</Link>,
+    label: <Link to="/aboutUs">About Us</Link>,
     key: "contact",
   },
 ];
@@ -86,7 +80,7 @@ const MenubarEco = () => {
             mode="horizontal"
             theme="dark"
             className="bg-blue-600 text-white border-none hidden lg:flex"
-            style={{ width: "500px" }}
+            style={{ width: "400px" }}
             items={items}
           />
         </nav>

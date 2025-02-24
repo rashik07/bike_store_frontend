@@ -1,84 +1,108 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Form, Input, Select, Button, Card, Typography, Divider } from "antd";
+import { Form, Input, Button, Card, Typography, Row, Col, message } from "antd";
 import ProductSummary from "../checkout/ProductSummary";
 import BillSummary from "../checkout/BillSummary";
+import { TProduct } from "@/types";
 
-interface Product {
-  _id: string;
-  name: string;
-  brand: string;
-  price: number;
-  type: string;
-  description: string;
-  quantity: number;
-  productImg: string;
-  inStock: boolean;
-}
+import { useAppSelector } from "@/redux/hooks";
+import { useCreateOrderMutation } from "@/redux/features/order/orderManagement.api";
 
 interface OrderFormProps {
-  products: Product[];
+  products: TProduct[];
+}
+
+interface OrderFormValues {
+  email: string;
+  address: string;
 }
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
-  const [selectedProduct, setSelectedProduct] = useState<Product>(products[0]);
-  const [quantity, setQuantity] = useState<number>(1);
-  const [userDetails, setUserDetails] = useState({ name: "", email: "" });
+  const [createOrder] = useCreateOrderMutation();
+  const user = useAppSelector((state) => state.auth.user);
+  // console.log("user", user.userEmail);
 
- 
 
-  const handleUserDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
-  };
+  const totalItems = products.reduce((total, item) => total + item.count, 0);
+  const totalPrice = products.reduce(
+    (total, item) => total + item.price * item.count,
+    0
+  );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle order submission logic here
-    console.log("Order submitted", { selectedProduct, quantity, userDetails });
+  const handleSubmit = async (values: OrderFormValues) => {
+    try {
+      await createOrder({
+        email: values.email,
+        address: values.address,
+        products,
+        totalItems,
+        totalPrice,
+      }).unwrap().then(() => {
+        message.success("Order submitted successfully");
+      });
+      console.log("Order submitted", {
+        values,
+        products,
+        totalItems,
+        totalPrice,
+      });
+    } catch (error) {
+      console.error("Order submission failed", error);
+    }
   };
 
   return (
-    <Card className="p-5">
-      <Form
-        onFinish={handleSubmit}
-        layout="vertical"
-        className="flex justify-between items-center"
-      >
-        <div>
-          
-         
-          <Title level={4}>Order Details</Title>
-            <Form.Item label="Name">
-              <Input
-                name="name"
-                value={userDetails.name}
-                onChange={handleUserDetailsChange}
-                required
-              />
+    <Card className="p-5 shadow-lg rounded-lg">
+      <Form onFinish={handleSubmit} layout="vertical">
+        <Row gutter={[24, 24]}>
+          {/* User Details Section */}
+          <Col xs={24} md={18}>
+            <Title level={4}>Order Details</Title>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please enter a valid email",
+                },
+              ]}
+            >
+              <Input defaultValue={user?.userEmail} disabled/>
             </Form.Item>
-      
-            <Form.Item label="Email">
-              <Input
-                type="email"
-                name="email"
-                value={userDetails.email}
-                onChange={handleUserDetailsChange}
-                required
-              />
+
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[{ required: true, message: "Please enter your address" }]}
+            >
+              <Input />
             </Form.Item>
+
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Order Now
               </Button>
             </Form.Item>
-         
-        </div>
-        {/* <Divider /> */}
-        <ProductSummary product={selectedProduct} quantity={quantity} />
-        <BillSummary product={selectedProduct} quantity={quantity} />
+          </Col>
+
+          {/* Product Summary Section */}
+          <Col xs={24} md={6}>
+            <Title level={4}>Product Summary</Title>
+            {products.map((product) => (
+              <ProductSummary
+                key={product._id}
+                product={product}
+                quantity={product.count}
+              />
+            ))}
+            <BillSummary totalItems={totalItems} totalPrice={totalPrice} />
+          </Col>
+        </Row>
       </Form>
     </Card>
   );

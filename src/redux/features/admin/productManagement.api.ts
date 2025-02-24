@@ -49,6 +49,13 @@ const productManagementApi = baseApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    getBrands: builder.query({
+      query: () => ({
+        url: "/brands",
+        method: "GET",
+      }),
+      providesTags: ["brands"],
+    }),
   }),
 });
 
@@ -57,4 +64,5 @@ export const {
   useGetProductByIdQuery,
   useAddProductManagementMutation,
   useDeleteProductMutation,
+  useGetBrandsQuery
 } = productManagementApi;

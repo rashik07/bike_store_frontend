@@ -1,4 +1,5 @@
 import Product_section from "@/components/home/Product_section";
+import Testimonial from "@/components/home/Testimonial";
 import { Carousel } from "antd";
 import React from "react";
 
@@ -10,14 +11,14 @@ const Home = () => {
         <Carousel autoplay>
           <div>
             <img
-              src="/carousel1.jpg"
+              src="/banner1.jpg"
               alt="Slide 1"
               className="w-full h-64 object-cover"
             />
           </div>
           <div>
             <img
-              src="/carousel2.jpg"
+              src="/banner2.jpg"
               alt="Slide 2"
               className="w-full h-64 object-cover"
             />
@@ -29,6 +30,7 @@ const Home = () => {
         <div className="bg-yellow-400 text-center py-4 text-xl font-bold my-6">
           Special Discount for Limited Time!
         </div>
+        <Testimonial />
       </div>
     </div>
   );

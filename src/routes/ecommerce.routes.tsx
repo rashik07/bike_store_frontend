@@ -4,6 +4,8 @@
 // import Product_table from "@/pages/dashboard/Products/Product_table";
 
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import AboutPage from "@/pages/About/AboutPage";
+import AllProducts from "@/pages/AllProduct/AllProduct";
 import Cart from "@/pages/cart/cart";
 import Checkout from "@/pages/checkout/Checkout";
 import Home from "@/pages/home/Home";
@@ -19,6 +21,16 @@ export const ecommercePath = [
     name: "ProductDetailsPage",
     path: "/ProductDetailsPage/:id",
     element: <ProductDetailsPage />,
+  },
+  {
+    name: "aboutUs",
+    path: "/aboutUs",
+    element: <AboutPage />,
+  },
+  {
+    name: "AllProducts",
+    path: "/allProducts",
+    element: <AllProducts />,
   },
   {
     name: "cart",
