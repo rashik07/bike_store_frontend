@@ -82,6 +82,11 @@ const SidebarDashboard = () => {
       label: "Dashboard",
     },
     {
+      key: "/admin/users",
+      icon: <PlusCircleOutlined />,
+      label: "Manage Users",
+    },
+    {
       key: "/admin/addProduct",
       icon: <PlusCircleOutlined />,
       label: "Add Products",

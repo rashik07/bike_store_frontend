@@ -31,3 +31,22 @@ export type TQueryParam = {
   name: string;
   value: boolean | React.Key;
 };
+
+export type TUser = {
+
+  role: string;
+  email: string;
+  iat: number;
+  exp: number;
+};
+export type TRole = "admin" | "customer";
+
+export type TUserData = {
+  name: string;
+ 
+  role: TRole;
+  email: string;
+  _id: string;
+  status: string;
+  createdAt: string;
+};

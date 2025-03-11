@@ -11,15 +11,15 @@ import { logout, setUser } from '../features/auth/authSlice';
 import { toast } from 'sonner';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://bicycle-store-amber.vercel.app/api',
+  baseUrl: 'http://localhost:5000/api',
+  // baseUrl: 'https://bicycle-store-amber.vercel.app/api',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
-
+    console.log(token);
     if (token) {
-      headers.set('authorization', `${token}`);
+      headers.set("authorization", `${token}`);
     }
-
     return headers;
   },
 });
@@ -42,7 +42,11 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     //* Send Refresh
     console.log('Sending refresh token');
 
-    const res = await fetch('https://bicycle-store-amber.vercel.app/api/auth/refresh-token', {
+    // const res = await fetch('https://bicycle-store-amber.vercel.app/api/auth/refresh-token', {
+    //   method: 'POST',
+    //   credentials: 'include',
+    // });
+    const res = await fetch('http://localhost:5000/api/auth/refresh-token', {
       method: 'POST',
       credentials: 'include',
     });

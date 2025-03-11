@@ -1,5 +1,6 @@
-// import { TQueryParam, TResponseRedux } from '../../../types';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TQueryParam, TResponseRedux } from '@/types';
 import { baseApi } from '../../api/baseApi';
 
 const userManagementApi = baseApi.injectEndpoints({
@@ -19,6 +20,28 @@ const userManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    getAllUsers: builder.query({
+      query: (args: TQueryParam[] | undefined) => {
+        const params = new URLSearchParams();
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+        return {
+          url: "/users/all",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["users"],
+      transformResponse: (response: TResponseRedux<any>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
   }),
 });
 
@@ -26,4 +49,5 @@ export const {
   useSignupMutation,
 
   useChangePasswordMutation,
+  useGetAllUsersQuery,
 } = userManagementApi;

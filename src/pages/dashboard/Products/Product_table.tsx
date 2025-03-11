@@ -20,7 +20,6 @@ import { FilterDropdownProps } from "antd/es/table/interface";
 import { QuestionCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words"; // Import Highlighter for text search highlighting
 
-
 const ProductTable: React.FC = () => {
   const [params] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState(1);
@@ -39,7 +38,7 @@ const ProductTable: React.FC = () => {
     ...params,
   ]);
   const [deleteProduct] = useDeleteProductMutation();
-  const handleDelete = async (record:any) => {
+  const handleDelete = async (record: any) => {
     try {
       await deleteProduct(record._id);
       // console.log(id);
@@ -163,7 +162,7 @@ const ProductTable: React.FC = () => {
         text
       ),
   });
-  
+
   const columns = [
     {
       title: "Image",
@@ -228,7 +227,6 @@ const ProductTable: React.FC = () => {
           >
             <Button danger>Delete</Button>
           </Popconfirm>
-         
         </Space>
       ),
     },
