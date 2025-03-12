@@ -1,79 +1,22 @@
-// import {
-//   Sidebar,
-//   SidebarContent,
-//   SidebarGroup,
-//   SidebarGroupContent,
-//   SidebarGroupLabel,
-//   SidebarMenu,
-//   SidebarMenuButton,
-//   SidebarMenuItem,
-// } from "@/components/ui/sidebar";
-
-// import { Bike, Home , GitMerge, ListOrdered } from "lucide-react";
-
-// const SidebarDashboard = () => {
-//   const items = [
-//     {
-//       title: "Dashboard",
-//       url: "/admin/dashboard",
-//       icon: Home,
-//     },
-//     {
-//       title: "Add Products",
-//       url: "/admin/addProduct",
-//       icon: Bike,
-//     },
-//     {
-//       title: "Product List",
-//       url: "/admin/ProductTable",
-//       icon: GitMerge ,
-//     },
-//     {
-//       title: "Order List",
-//       url: "/admin/OrderTable",
-//       icon: ListOrdered  ,
-//     },
-//   ];
-
-//   return (
-//     <Sidebar className="mt-[68px]">
-//       <SidebarContent>
-//         <SidebarGroup>
-//           <SidebarGroupLabel>Application</SidebarGroupLabel>
-//           <SidebarGroupContent>
-//             <SidebarMenu>
-//               {items?.map((item) => (
-//                 <SidebarMenuItem key={item.title}>
-//                   <SidebarMenuButton asChild>
-//                     <a href={item.url}>
-//                       <item.icon />
-//                       <span>{item.title}</span>
-//                     </a>
-//                   </SidebarMenuButton>
-//                 </SidebarMenuItem>
-//               ))}
-//             </SidebarMenu>
-//           </SidebarGroupContent>
-//         </SidebarGroup>
-//       </SidebarContent>
-//     </Sidebar>
-//   );
-// };
-
-// export default SidebarDashboard;
 import { Layout, Menu } from "antd";
 import {
   HomeOutlined,
+  UserOutlined,
   PlusCircleOutlined,
   UnorderedListOutlined,
   ShoppingCartOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const { Sider } = Layout;
 
 const SidebarDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
 
   const items = [
     {
@@ -83,7 +26,7 @@ const SidebarDashboard = () => {
     },
     {
       key: "/admin/users",
-      icon: <PlusCircleOutlined />,
+      icon: <UserOutlined />,
       label: "Manage Users",
     },
     {
@@ -104,11 +47,26 @@ const SidebarDashboard = () => {
   ];
 
   return (
-    <Sider style={{ height: "100vh" }}>
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
+      collapsedWidth={80}
+      width={250}
+      style={{ height: "100vh", position: "fixed", left: 0, top: 0 }}
+    >
+      <div className="p-4 text-white text-center">
+        {collapsed ? (
+          <MenuUnfoldOutlined onClick={() => setCollapsed(false)} />
+        ) : (
+          <MenuFoldOutlined onClick={() => setCollapsed(true)} />
+        )}
+      </div>
+
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["/admin/dashboard"]}
+        selectedKeys={[location.pathname]}
         onClick={({ key }) => navigate(key)}
         items={items}
       />

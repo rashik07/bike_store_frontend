@@ -42,7 +42,7 @@ const AddProductForm: React.FC = () => {
       message.success("Product added successfully!");
       form.resetFields();
       setFileList([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       message.error("Failed to add product. Please try again.");
     } finally {
@@ -52,7 +52,11 @@ const AddProductForm: React.FC = () => {
 
   return (
     <>
-      <h1>Product Add</h1>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 text-center">
+          Add Product
+        </h1>
+      </div>
       <Form
         form={form}
         layout="vertical"
@@ -62,7 +66,9 @@ const AddProductForm: React.FC = () => {
         <Form.Item
           label="Bicycle Name"
           name="name"
-          rules={[{ required: true, message: "Please enter the bicycle name!" }]}
+          rules={[
+            { required: true, message: "Please enter the bicycle name!" },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -123,7 +129,12 @@ const AddProductForm: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading} disabled={loading}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            disabled={loading}
+          >
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </Form.Item>

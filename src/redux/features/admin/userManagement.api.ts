@@ -1,22 +1,20 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TQueryParam, TResponseRedux } from '@/types';
-import { baseApi } from '../../api/baseApi';
+import { TQueryParam, TResponseRedux } from "@/types";
+import { baseApi } from "../../api/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-   
     signup: builder.mutation({
       query: (data) => ({
-        url: '/users/create-customer',
-        method: 'POST',
+        url: "/users/create-customer",
+        method: "POST",
         body: data,
       }),
     }),
     changePassword: builder.mutation({
       query: (data) => ({
-        url: '/auth/change-password',
-        method: 'POST',
+        url: "/auth/change-password",
+        method: "POST",
         body: data,
       }),
     }),
@@ -42,6 +40,14 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateUser: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/users/change-status/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["users", "user"],
+    }),
   }),
 });
 
@@ -50,4 +56,5 @@ export const {
 
   useChangePasswordMutation,
   useGetAllUsersQuery,
+  useUpdateUserMutation,
 } = userManagementApi;
