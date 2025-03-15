@@ -43,7 +43,7 @@ export const ecommercePath = [
   },
   {
     name: "checkout",
-    path: "/checkout",
+    path: "/checkout/:id",
     element: (
       <ProtectedRoute role="customer">
         <Checkout />

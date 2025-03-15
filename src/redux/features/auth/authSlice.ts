@@ -4,6 +4,7 @@ import { RootState } from '../../store';
 
 
 export type TUser = {
+  [x: string]: any;
   userId: string;
   userEmail: string;
   role: string;

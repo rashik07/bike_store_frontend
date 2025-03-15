@@ -1,16 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
-import { Form, Input, Button, Card, Typography, Row, Col, message } from "antd";
+import React, { useState } from "react";
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Row,
+  Col,
+  message,
+  InputNumber,
+} from "antd";
 import ProductSummary from "../checkout/ProductSummary";
 import BillSummary from "../checkout/BillSummary";
 // import { TProduct } from "@/types";
 
 import { useAppSelector } from "@/redux/hooks";
 import { useCreateOrderMutation } from "@/redux/features/order/orderManagement.api";
-
-interface OrderFormProps {
-  products: any;
-}
+import { TProduct } from "@/types";
 
 interface OrderFormValues {
   email: string;
@@ -19,33 +26,35 @@ interface OrderFormValues {
 
 const { Title } = Typography;
 
-const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
+const OrderForm: React.FC<TProduct> = ({ products }) => {
+  const [quantity, setQuantity] = useState(1);
   const [createOrder] = useCreateOrderMutation();
   const user = useAppSelector((state) => state.auth.user);
-  // console.log("user", user.userEmail);
+  if (!user) {
+    return <div>Please log in to place an order.</div>;
+  }
 
-
-  const totalItems = products.reduce((total:number, item:any) => total + item.count, 0);
-  const totalPrice = products.reduce(
-    (total:number, item:any) => total + item.price * item.count,
-    0
-  );
+  // const totalItems = quantity;
+  const totalPrice = products.price * quantity;
 
   const handleSubmit = async (values: OrderFormValues) => {
     try {
+      console.log(values);
       await createOrder({
-        email: values.email,
+        user: values.email,
         address: values.address,
-        products,
-        totalItems,
+        product: products._id,
+        quantity,
         totalPrice,
-      }).unwrap().then(() => {
-        message.success("Order submitted successfully");
-      });
+      })
+        .unwrap()
+        .then(() => {
+          message.success("Order submitted successfully");
+        });
       console.log("Order submitted", {
         values,
         products,
-        totalItems,
+        quantity,
         totalPrice,
       });
     } catch (error) {
@@ -55,7 +64,15 @@ const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
 
   return (
     <Card className="p-5 shadow-lg rounded-lg">
-      <Form onFinish={handleSubmit} layout="vertical">
+      <Form
+        onFinish={handleSubmit}
+        layout="vertical"
+        initialValues={{
+          price: products?.price,
+          email: user?.email ,
+          quantity: 1,
+        }}
+      >
         <Row gutter={[24, 24]}>
           {/* User Details Section */}
           <Col xs={24} md={18}>
@@ -72,9 +89,23 @@ const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
                 },
               ]}
             >
-              <Input defaultValue={user?.userEmail} disabled/>
+              <Input readOnly />
             </Form.Item>
 
+            <Form.Item
+              label={`Quantity Available: ${products.quantity}`}
+              name="quantity"
+              rules={[{ required: true, message: "Please enter your address" }]}
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                min={1}
+                max={products?.quantity}
+                onChange={(value) => {
+                  setQuantity(value || 1);
+                }}
+              />
+            </Form.Item>
             <Form.Item
               label="Address"
               name="address"
@@ -93,14 +124,10 @@ const OrderForm: React.FC<OrderFormProps> = ({ products }) => {
           {/* Product Summary Section */}
           <Col xs={24} md={6}>
             <Title level={4}>Product Summary</Title>
-            {products.map((product:any) => (
-              <ProductSummary
-                key={product._id}
-                product={product}
-                quantity={product.count}
-              />
-            ))}
-            <BillSummary totalItems={totalItems} totalPrice={totalPrice} />
+
+            <ProductSummary product={products} />
+
+            <BillSummary totalItems={quantity} totalPrice={totalPrice} />
           </Col>
         </Row>
       </Form>

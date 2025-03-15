@@ -1,22 +1,12 @@
 import React from "react";
 import { Card, Image } from "antd";
+import { TProduct } from "@/types";
 
-interface Product {
-  name: string;
 
-  price: number;
-  productImg: string;
-}
 
-interface ProductSummaryProps {
-  product: Product;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  quantity: any;
-}
+const ProductSummary: React.FC<TProduct> = ({
+  product
 
-const ProductSummary: React.FC<ProductSummaryProps> = ({
-  product,
-  quantity,
 }) => {
   return (
     <Card className="flex justify-between p-4">
@@ -38,7 +28,7 @@ const ProductSummary: React.FC<ProductSummaryProps> = ({
           <strong>Price:</strong> ${product.price}
         </p>
         <p>
-          <strong>Quantity:</strong> {quantity}
+          {/* <strong>Quantity:</strong> {product.quantity} */}
         </p>
       </div>
     </Card>
