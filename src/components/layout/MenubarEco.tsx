@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-
-  ShoppingCartOutlined,
-  MenuOutlined,
-} from "@ant-design/icons";
+import {  MenuOutlined } from "@ant-design/icons";
 import { Menu, Button, Drawer } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -14,13 +10,11 @@ const items = [
   {
     label: <Link to="/">Home</Link>,
     key: "home",
-
   },
 
   {
     label: <Link to="/allProducts">Products</Link>,
     key: "products",
-
   },
   {
     label: <Link to="/aboutUs">About Us</Link>,
@@ -44,12 +38,12 @@ const MenubarEco = () => {
     navigate("/login");
   };
 
-  const handleCart = () => {
-    navigate("/cart");
+  const handleCustomerDashboard = () => {
+    navigate("/CustomerDashboard");
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onClick = (e:any) => {
+  const onClick = (e: any) => {
     setCurrent(e.key);
     setVisible(false); // Close drawer when menu item is clicked
   };
@@ -73,7 +67,11 @@ const MenubarEco = () => {
           />
         </div>
         <nav className="flex items-center space-x-6">
-          <Button className="lg:hidden" onClick={showDrawer} icon={<MenuOutlined />} />
+          <Button
+            className="lg:hidden"
+            onClick={showDrawer}
+            icon={<MenuOutlined />}
+          />
           <Menu
             onClick={onClick}
             selectedKeys={[current]}
@@ -85,13 +83,18 @@ const MenubarEco = () => {
           />
         </nav>
         <div>
-          <Button
-            type="default"
-            shape="circle"
-            icon={<ShoppingCartOutlined />}
-            className="ml-6"
-            onClick={handleCart}
-          />
+          {user ? (
+            <Button
+              type="default"
+              // shape="circle"
+              className="ml-6"
+              onClick={handleCustomerDashboard}
+            >
+              Dashboard
+            </Button>
+          ) : (
+            ""
+          )}
           {user ? (
             <Button
               type="primary"

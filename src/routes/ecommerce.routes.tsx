@@ -8,6 +8,8 @@ import AboutPage from "@/pages/About/AboutPage";
 import AllProducts from "@/pages/AllProduct/AllProduct";
 import Cart from "@/pages/cart/cart";
 import Checkout from "@/pages/checkout/Checkout";
+import OrderVerification from "@/pages/checkout/VerifyOrder";
+import CustomerDashboard from "@/pages/CustomerDashoboard/CustomerDashboard";
 import Home from "@/pages/home/Home";
 import ProductDetailsPage from "@/pages/ProductDetailsPage/ProductDetailsPage";
 
@@ -47,6 +49,24 @@ export const ecommercePath = [
     element: (
       <ProtectedRoute role="customer">
         <Checkout />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    name: "Verify Order",
+    path: "verify-order",
+    element: (
+      <ProtectedRoute role="customer">
+        <OrderVerification />,
+      </ProtectedRoute>
+    ),
+  },
+  {
+    name: "Customer Dashboard",
+    path: "CustomerDashboard",
+    element: (
+      <ProtectedRoute role="customer">
+        <CustomerDashboard />,
       </ProtectedRoute>
     ),
   },

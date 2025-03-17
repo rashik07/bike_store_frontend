@@ -40,23 +40,23 @@ const OrderForm: React.FC<TProduct> = ({ products }) => {
   const handleSubmit = async (values: OrderFormValues) => {
     try {
       console.log(values);
-      await createOrder({
+      const res = await createOrder({
         user: values.email,
         address: values.address,
         product: products._id,
         quantity,
         totalPrice,
-      })
-        .unwrap()
-        .then(() => {
-          message.success("Order submitted successfully");
-        });
-      console.log("Order submitted", {
-        values,
-        products,
-        quantity,
-        totalPrice,
-      });
+      }).unwrap();
+      console.log(res);
+      if (res.data) {
+        message.success("Order submitted successfully");
+        setTimeout(() => {
+          // window.open(res.data.data.payment.checkout_url, "_blank");
+          window.location.href = res.data.payment.checkout_url;
+        }, 1000);
+      } else if (res.error) {
+        message.error(res.error.data.message);
+      }
     } catch (error) {
       console.error("Order submission failed", error);
     }
@@ -69,7 +69,7 @@ const OrderForm: React.FC<TProduct> = ({ products }) => {
         layout="vertical"
         initialValues={{
           price: products?.price,
-          email: user?.email ,
+          email: user?.email,
           quantity: 1,
         }}
       >
