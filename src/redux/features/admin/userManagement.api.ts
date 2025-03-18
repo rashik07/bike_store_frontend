@@ -40,6 +40,13 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getUser: builder.query({
+      query: (email) => ({
+        url: `/users/me/${email}`,
+        method: "GET",
+      }),
+      providesTags: ["user"],
+    }),
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
         url: `/users/change-status/${id}`,
@@ -54,7 +61,9 @@ const userManagementApi = baseApi.injectEndpoints({
 export const {
   useSignupMutation,
 
+
   useChangePasswordMutation,
   useGetAllUsersQuery,
+  useGetUserQuery,
   useUpdateUserMutation,
 } = userManagementApi;

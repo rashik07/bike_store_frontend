@@ -4,6 +4,7 @@
 // import Product_table from "@/pages/dashboard/Products/Product_table";
 
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import MyOrders from "@/components/User/MyOrder";
 import AboutPage from "@/pages/About/AboutPage";
 import AllProducts from "@/pages/AllProduct/AllProduct";
 import Cart from "@/pages/cart/cart";
@@ -57,7 +58,7 @@ export const ecommercePath = [
     path: "verify-order",
     element: (
       <ProtectedRoute role="customer">
-        <OrderVerification />,
+        <OrderVerification />
       </ProtectedRoute>
     ),
   },
@@ -66,7 +67,16 @@ export const ecommercePath = [
     path: "CustomerDashboard",
     element: (
       <ProtectedRoute role="customer">
-        <CustomerDashboard />,
+        <CustomerDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    name: "my orders",
+    path: "myOrders",
+    element: (
+      <ProtectedRoute role="customer">
+        <MyOrders />
       </ProtectedRoute>
     ),
   },

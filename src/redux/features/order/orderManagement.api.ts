@@ -27,8 +27,8 @@ const orderManagementApi = baseApi.injectEndpoints({
       },
     }),
     getMyOrders: builder.query({
-      query: (id) => ({
-        url: `/orders/my-orders/${id}`,
+      query: (email) => ({
+        url: `/orders/my-orders/${email}`,
         method: "GET",
       }),
       providesTags: ["orders"],
