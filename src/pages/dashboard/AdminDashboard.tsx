@@ -1,11 +1,11 @@
-
+import MyProfile from "@/components/User/MyProfile";
 
 const AdminDashboard = () => {
-    return (
-        <div>
-            this is admin dashboard
-        </div>
-    );
+  return (
+    <div>
+      <MyProfile />
+    </div>
+  );
 };
 
 export default AdminDashboard;
