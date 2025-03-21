@@ -75,6 +75,7 @@ const LoginForm = () => {
             </Button>
           </Form.Item>
         </Form>
+        <p >Not Registered? <span className="text-red-600 ">click the sign up</span></p>
         <Button type="default" block onClick={() => navigate("/signup")}>
           Sign Up
         </Button>

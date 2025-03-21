@@ -39,12 +39,20 @@ const SignupForm: React.FC = () => {
       };
       const res = await signup(payload).unwrap();
       console.log(res);
-      if (res.success==true) {
-        await message.success({ content: "Customer is created successfully", key, duration: 2 });
+      if (res.success == true) {
+        await message.success({
+          content: "Customer is created successfully",
+          key,
+          duration: 2,
+        });
         const resLogin = await login(payloadLogin).unwrap();
         const user = verifyToken(resLogin.data.accessToken) as TUser;
         dispatch(setUser({ user, token: resLogin.data.accessToken }));
-        await message.success({ content: "Login successful!", key, duration: 2 });
+        await message.success({
+          content: "Login successful!",
+          key,
+          duration: 2,
+        });
         navigate("/");
       }
     } catch (error) {
@@ -98,13 +106,14 @@ const SignupForm: React.FC = () => {
               Sign Up
             </Button>
           </Form.Item>
-          
-          <Form.Item>
-            <Button type="default" block onClick={() => navigate("/login")}>
-              Login
-            </Button>
-          </Form.Item>
+          <p>
+            Already an User?{" "}
+            <span className="text-red-600 ">click the Login</span>
+          </p>
         </Form>
+        <Button type="default" block onClick={() => navigate("/login")}>
+          Login
+        </Button>
       </Card>
     </div>
   );

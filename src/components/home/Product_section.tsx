@@ -8,7 +8,7 @@ const ProductSection = () => {
 
   return (
     <div>
-      <section className="max-w-6xl mx-auto my-8 px-4">
+      <section className="max-w-6xl mx-auto my-8 ">
         <h2 className="text-2xl font-bold text-center mb-4">Our Products</h2>
         {isLoading && <p className="text-center">Loading...</p>}
         {error && <p className="text-center text-red-500">Error loading products</p>}

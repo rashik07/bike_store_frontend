@@ -1,5 +1,3 @@
-
-
 import { Outlet } from "react-router-dom";
 
 import "antd/dist/reset.css";
@@ -8,7 +6,7 @@ import FooterEco from "./FooterEco";
 
 const MainLayout = () => {
   return (
-    <div>
+    <>
       {/* this is main MainLayout <br/>
             <Outlet />
             <Button onClick={handleLogout}>Click me</Button> */}
@@ -19,7 +17,7 @@ const MainLayout = () => {
         <Outlet />
         <FooterEco />
       </div>
-    </div>
+    </>
   );
 };
 

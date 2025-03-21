@@ -48,7 +48,7 @@ export default function AllProducts() {
   ]);
 
   const { data: brandsData } = useGetBrandsQuery({ skip: !isFetching });
-  console.log(brandsData);
+  console.log(productsData);
   const brands = brandsData?.data.map((brand: string) => ({
     value: brand,
     label: brand,

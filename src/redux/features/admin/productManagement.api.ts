@@ -6,10 +6,8 @@ import { baseApi } from "../../api/baseApi";
 const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: (args) => {
-        console.log(args);
+      query: (args: TQueryParam[] | undefined) => {
         const params = new URLSearchParams();
-
         if (args) {
           args.forEach((item: TQueryParam) => {
             params.append(item.name, item.value as string);
@@ -21,10 +19,13 @@ const productManagementApi = baseApi.injectEndpoints({
           params,
         };
       },
+      providesTags: ["products"],
       transformResponse: (response: TResponseRedux<any>) => {
-        return { data: response.data, meta: response.meta };
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
       },
-      // providesTags: [ 'products' ],
     }),
 
     getProductById: builder.query({
