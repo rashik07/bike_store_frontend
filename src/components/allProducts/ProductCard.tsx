@@ -24,7 +24,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <h3 className="text-lg font-semibold mt-2 text-center">
           {product.name}
         </h3>
-        <p className="text-gray-600 text-center">${product.price.toFixed(2)}</p>
+        <p className="text-gray-600 text-center">${(product.price ?? 0).toFixed(2)}</p>
         <p className="text-sm text-gray-500 text-center">
           {product.description}
         </p>
