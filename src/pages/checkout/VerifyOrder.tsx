@@ -1,9 +1,9 @@
 import { Link, useSearchParams } from "react-router";
 import { Card, Skeleton, Badge, Button, Descriptions, Typography } from "antd";
-import { CheckCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+
 import { useVerifyOrderQuery } from "@/redux/features/order/orderManagement.api";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export default function OrderVerification() {
   const [searchParams] = useSearchParams();
@@ -55,16 +55,8 @@ export default function OrderVerification() {
             </Descriptions>
           </Card>
 
-          <Card title="Verification Status" bordered>
-            <div className="flex items-center gap-2 text-lg">
-              {orderData?.is_verify === 1 ? (
-                <CheckCircleOutlined style={{ color: "green" }} />
-              ) : (
-                <ExclamationCircleOutlined style={{ color: "orange" }} />
-              )}
-              <Text>{orderData?.is_verify === 1 ? "Verified" : "Not Verified"}</Text>
-            </div>
-            <Link to="/order">
+          <Card  bordered>
+          <Link to="/CustomerDashboard?key=2">
               <Button type="primary" block className="mt-4">View Orders</Button>
             </Link>
           </Card>

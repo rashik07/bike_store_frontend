@@ -1,6 +1,6 @@
 import { useState } from "react";
-import {  MenuOutlined } from "@ant-design/icons";
-import { Menu, Button, Drawer } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
+import { Menu, Button, Drawer, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
@@ -32,6 +32,7 @@ const MenubarEco = () => {
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearCart());
+    message.success("Logout successfully");
   };
 
   const handleLogin = () => {
@@ -39,7 +40,11 @@ const MenubarEco = () => {
   };
 
   const handleCustomerDashboard = () => {
-    navigate("/CustomerDashboard");
+    if (user && user.role == "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/CustomerDashboard");
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
