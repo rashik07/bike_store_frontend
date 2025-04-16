@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Rate, Spin } from "antd";
+import { Button, Image, Rate, Spin } from "antd";
 import "antd/dist/reset.css";
 import { useGetProductByIdQuery } from "@/redux/features/admin/productManagement.api";
 // import { useAppDispatch } from "@/redux/hooks";
@@ -31,7 +31,6 @@ const ProductDetailsPage: React.FC = () => {
 
   // Increment quantity
 
-
   if (isLoading) return <Spin className="text-center" size="large" />;
   if (error || !product)
     return <p className="text-center">Error loading product details</p>;
@@ -43,7 +42,7 @@ const ProductDetailsPage: React.FC = () => {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
         {/* Product Images */}
         <div className="flex justify-center items-center">
-          <img
+          <Image
             src={product.productImg}
             alt={product.name}
             className="w-full h-96 object-cover rounded-lg shadow-md"
@@ -54,10 +53,10 @@ const ProductDetailsPage: React.FC = () => {
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-4xl font-bold text-gray-800">{product.name}</h1>
-            <p className="text-xl text-gray-700 mt-2">
-              ${product.price}
+            <p className="text-xl text-gray-700 mt-2">${product.price}</p>
+            <p className="text-gray-600 mt-2 text-left">
+              {product.description}
             </p>
-            <p className="text-gray-600 mt-2">{product.description}</p>
             <p className="text-gray-700 mt-2">
               Stock: <span className="font-semibold">{product.quantity}</span>
             </p>
@@ -104,7 +103,7 @@ const ProductDetailsPage: React.FC = () => {
       {/* Specifications */}
       <section className="max-w-6xl mx-auto px-4 my-10">
         <h2 className="text-2xl font-bold text-gray-800">Details</h2>
-        <p className="text-gray-600 mt-2">{product.description}</p>
+        <p className="text-gray-600 mt-2 text-left">{product.description}</p>
       </section>
 
       {/* Similar Products */}

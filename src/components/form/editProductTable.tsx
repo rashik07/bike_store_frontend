@@ -77,6 +77,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   const columns = [
     {
+      title: "Id",
+      dataIndex: "_id",
+      key: "_id",
+    },
+    {
       title: "Image",
       dataIndex: "productImg",
       key: "productImg",

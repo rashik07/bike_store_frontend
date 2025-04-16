@@ -124,8 +124,15 @@ const AddProductForm: React.FC = () => {
           </Upload>
         </Form.Item>
 
-        <Form.Item label="Description" name="description">
-          <Input.TextArea rows={4} />
+        <Form.Item
+          label="Description"
+          name="description"
+          // rules={[{ required: true, message: "Please enter a description!" }]}
+        >
+          <Input.TextArea
+            rows={6}
+            placeholder="Enter a brief description of the product"
+          />
         </Form.Item>
 
         <Form.Item>
