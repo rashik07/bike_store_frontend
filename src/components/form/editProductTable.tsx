@@ -17,6 +17,7 @@ import {
   Pagination,
   Popconfirm,
   Space,
+  Spin,
   Table,
   //   TableColumnType,
 } from "antd";
@@ -68,7 +69,11 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const metaData = productsResponse?.data?.meta;
 
   if (isLoading || isFetching) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spin size="large" />
+      </div>
+    );
   }
 
   if (isError || !productsResponse || !productsResponse.data.result) {
