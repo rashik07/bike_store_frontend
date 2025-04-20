@@ -13,7 +13,7 @@ import { toast } from "sonner";
 const baseQuery = fetchBaseQuery({
   // baseUrl: "http://localhost:5000/api",
   // baseUrl: 'https://bicycle-store-amber.vercel.app/api',
-  baseUrl: 'bicyclestore-production.up.railway.app/api',
+  baseUrl: 'https://bicyclestore-production.up.railway.app/api',
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -53,7 +53,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     // });
 
     //railway
-    const res = await fetch("bicyclestore-production.up.railway.app/api/auth/refresh-token", {
+    const res = await fetch("https://bicyclestore-production.up.railway.app/api/auth/refresh-token", {
       method: "POST",
       credentials: "include",
     });
